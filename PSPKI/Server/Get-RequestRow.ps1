@@ -1,15 +1,50 @@
 function Get-RequestRow {
 [CmdletBinding()]
     param(
+        [PKI.CertificateServices.CertificateAuthority]$CA,
         [SysadminsLV.PKI.Management.CertificateServices.Database.AdcsDbReader]$Reader,
         [int]$Page,
         [int]$PageSize = [int]::MaxValue,
         [String[]]$Property,
         [String[]]$Filter,
-        [SysadminsLV.PKI.Management.CertificateServices.Database.AdcsDbColumnSchema[]]$Schema
+        [SysadminsLV.PKI.Management.CertificateServices.Database.AdcsDbColumnSchema[]]$Schema,
+        [switch]$IncludeAttribute,
+        [switch]$IncludeExtension
     )
     $ErrorActionPreference = "Stop"
-# parse restriction filters
+    $AllowedIncludeSourceTables = @("Request", "Revoked", "Issued", "Pending", "Failed")
+    $AllowIncludeAttribute = $AllowedIncludeSourceTables -contains $Reader.ViewTable -and $IncludeAttribute
+    $AllowIncludeExtension = $AllowedIncludeSourceTables -contains $Reader.ViewTable -and $IncludeExtension
+
+    function Join-AttributeTable($DbRow) {
+        $NestedReader = $CA.GetDbReader("Attribute")
+        [void]$NestedReader.AddQueryFilter(
+            (New-Object SysadminsLV.PKI.Management.CertificateServices.Database.AdcsDbQueryFilter "AttributeRequestId", 1, $DbRow.Properties["RequestID"])
+        )
+        $Rows = $NestedReader.GetView() | ForEach-Object {
+            New-Object PSObject -Property @{
+                AttributeName = $_.Properties["AttributeName"]
+                AttributeValue = $_.Properties["AttributeValue"]
+            }
+        }
+        $DbRow.Properties.Add("RowAttributes", $Rows)
+    }
+    function Join-ExtensionTable($DbRow) {
+        $NestedReader = $CA.GetDbReader("Extension")
+        [void]$NestedReader.AddQueryFilter(
+            (New-Object SysadminsLV.PKI.Management.CertificateServices.Database.AdcsDbQueryFilter "ExtensionRequestId", 1, $DbRow.Properties["RequestID"])
+        )
+        $Rows = $NestedReader.GetView() | ForEach-Object {
+            New-Object PSObject -Property @{
+                ExtensionNameOid = $_.Properties["ExtensionNameOid"]
+                ExtensionObject = $_.Properties["ExtensionObject"]
+                ExtensionFlags = $_.Properties["ExtensionFlagsEnum"]
+            }
+        }
+        $DbRow.Properties.Add("RowExtensions", $Rows)
+    }
+    
+    # parse restriction filters
     if ($Filter -ne $null) {
         foreach ($line in $Filter) {
             if ($line -notmatch "^(.+)\s(-eq|-lt|-le|-ge|-gt)\s(.+)$") {
@@ -50,6 +85,13 @@ function Get-RequestRow {
     try {
         $skip = ($Page - 1) * $PageSize
         $Reader.GetView($skip, $PageSize) | ForEach-Object {
+            if ($AllowIncludeAttribute) {
+                Join-AttributeTable $_
+            }
+            if ($AllowIncludeExtension) {
+                Join-ExtensionTable $_
+            }
+
             foreach ($key in $_.Properties.Keys) {
                 $_ | Add-Member -MemberType NoteProperty $key -Value $_.Properties[$key] -Force
             }
