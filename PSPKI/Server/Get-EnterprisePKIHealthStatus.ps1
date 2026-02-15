@@ -498,7 +498,7 @@ namespace PKI.EnterprisePKI {
                 $obj = __downloadCert $urlElement.Url
                 if ($obj -is [Security.Cryptography.X509Certificates.X509Certificate2]) {
                     $urlElement.SetObject($obj)
-                    $urlElement = __verifyAIA $urlElement $projectedChain[$i + 1]
+                    $urlElement = __verifyAIA $urlElement $projectedChain[$n + 1]
                 } else {
                     Write-Debug "Failed to download certificate."
                     $urlElement.SetError($s_error -bor [PKI.EnterprisePKI.UrlStatus]::FailedToDownload)
@@ -518,7 +518,7 @@ namespace PKI.EnterprisePKI {
                     Url = $urlPack.OCSP[$n];
                     UrlType = [PKI.EnterprisePKI.UrlType]::Ocsp;
                 }
-                $urlElement = __verifyOCSP $projectedChain[$i] $urlElement
+                $urlElement = __verifyOCSP $projectedChain[$n] $urlElement
                 $CAObject.URLs += $urlElement
             }
             $CAObject
