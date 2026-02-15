@@ -259,9 +259,9 @@ namespace PKI.EnterprisePKI {
                 $cert = New-Object Security.Cryptography.X509Certificates.X509Certificate2 @(,$rawData)
                 # CRL Distribution Points
                 Write-Debug "Fetching 'CRL Distribution Points' extension..."
-                $e = $cert.Extensions["2.5.29.31"]
-                if ($e) {
-                    $asn = New-Object Security.Cryptography.AsnEncodedData (,$e.RawData)
+                $extension = $cert.Extensions["2.5.29.31"]
+                if ($extension) {
+                    $asn = New-Object Security.Cryptography.AsnEncodedData (,$extension.RawData)
                     $cdp = New-Object SysadminsLV.PKI.Cryptography.X509Certificates.X509CRLDistributionPointsExtension $asn, $false
                     $URLs.CDP = $cdp.GetURLs()
                     Write-Debug "Found $(($URLs.CDP).Length) CDP URLs."
@@ -271,9 +271,9 @@ namespace PKI.EnterprisePKI {
                 }
                 # Authority Information Access
                 Write-Debug "Fetching 'Authority Information Access' extension..."
-                $e = $cert.Extensions["1.3.6.1.5.5.7.1.1"]
-                if ($e) {
-                    $asn = New-Object Security.Cryptography.AsnEncodedData (,$e.RawData)
+                $extension = $cert.Extensions["1.3.6.1.5.5.7.1.1"]
+                if ($extension) {
+                    $asn = New-Object Security.Cryptography.AsnEncodedData (,$extension.RawData)
                     $aia = New-Object SysadminsLV.PKI.Cryptography.X509Certificates.X509AuthorityInformationAccessExtension $asn, $false
                     $URLs.AIA = $aia.CertificationAuthorityIssuer
                     Write-Debug "Found $(($URLs.AIA).Length) Certification Authority Issuer URLs."
@@ -288,9 +288,9 @@ namespace PKI.EnterprisePKI {
             } else {
                 Write-Debug "Fetching 'Freshest CRL' extension..."
                 $crl = New-Object SysadminsLV.PKI.Cryptography.X509Certificates.X509CRL2 @(,$rawData)
-                $e = $crl.Extensions["2.5.29.46"] # Freshest CRL
-                if ($e) {
-                    $URLs.FreshestCRL = $e.GetURLs()
+                $extension = $crl.Extensions["2.5.29.46"] # Freshest CRL
+                if ($extension) {
+                    $URLs.FreshestCRL = $extension.GetURLs()
                     Write-Debug "Found $(($URLs.FreshestCRL).Length) Freshest CRL URLs."
                     if ($URLs.FreshestCRL) {$URLs.FreshestCRL | ForEach-Object {Write-Debug $_}}
                 } else {
@@ -347,12 +347,12 @@ namespace PKI.EnterprisePKI {
         }
         # returns DateTime or Null (for CRL v1)
         function __getCrlNextPublish($crl) {
-            $e = $crl.Extensions["1.3.6.1.4.1.311.21.4"]
-            if (!$e) {return}
+            $extension = $crl.Extensions["1.3.6.1.4.1.311.21.4"]
+            if (!$extension) {return}
             $dt = try {
-                    (New-Object SysadminsLV.Asn1Parser.Universal.Asn1UtcTime -ArgumentList @(,($e.RawData))).Value
+                    (New-Object SysadminsLV.Asn1Parser.Universal.Asn1UtcTime -ArgumentList @(,($extension.RawData))).Value
                 } catch {
-                    (New-Object SysadminsLV.Asn1Parser.Universal.Asn1GeneralizedTime -ArgumentList @(,($e.RawData))).Value
+                    (New-Object SysadminsLV.Asn1Parser.Universal.Asn1GeneralizedTime -ArgumentList @(,($extension.RawData))).Value
                 }
         }
         # returns UrlElement. $cert -- issuer candidate/X509ChainElement.
@@ -414,7 +414,6 @@ namespace PKI.EnterprisePKI {
                         Write-Debug "Scheduled CRL publish expired."
                         $urlElement.SetError($s_warning -bor [PKI.EnterprisePKI.UrlStatus]::ScheduleExpired)
                     }
-                    $urlElement
                     return
                 }
                 $fullTime = ($crl.NextUpdate - $crl.ThisUpdate).TotalSeconds
@@ -437,7 +436,6 @@ namespace PKI.EnterprisePKI {
                 }
             }
             $urlElement.SetError($errorCode)
-            $urlElement
         }
         # returns UrlElement
         function __verifyOCSP {
@@ -483,7 +481,6 @@ namespace PKI.EnterprisePKI {
                 $urlElement.SetError($s_error -bor [PKI.EnterprisePKI.UrlStatus]::NetworkRetrievalError)
                 $urlElement.ExtendedErrorInfo = $_.Error.Exception.Message
             }
-            $urlElement
         }
         # returns CAObject
         function __processCerts ($CAObject, $projectedChain) {
@@ -506,7 +503,6 @@ namespace PKI.EnterprisePKI {
                 }
                 $CAObject.URLs += $urlElement
             }
-            $CAObject
         }
         # returns CAObject
         function __processOcsp ($CAObject, $projectedChain) {
@@ -518,10 +514,9 @@ namespace PKI.EnterprisePKI {
                     Url = $urlPack.OCSP[$n];
                     UrlType = [PKI.EnterprisePKI.UrlType]::Ocsp;
                 }
-                $urlElement = __verifyOCSP $projectedChain[$n] $urlElement
+                __verifyOCSP $projectedChain[$n] $urlElement
                 $CAObject.URLs += $urlElement
             }
-            $CAObject
         }
         # returns X509HealthPath
         function __validateSinglePath {
@@ -544,70 +539,70 @@ namespace PKI.EnterprisePKI {
             } else {
                 New-Object PKI.EnterprisePKI.X509HealthPath -Property @{Name = "$($matches[1]) ($keyIndex)"}
             }
-            for ($i = 0; $i -lt $projectedChain.Length; $i++) {
-                Write-Debug "========================= $($projectedChain[$i].Certificate.Issuer) ========================="
+            for ($chainIndex = 0; $chainIndex -lt $projectedChain.Length; $chainIndex++) {
+                Write-Debug "========================= $($projectedChain[$chainIndex].Certificate.Issuer) ========================="
                 # skip self-signed certificate from checking
                 if (!(
-                    Compare-Object -ReferenceObject $projectedChain[$i].Certificate.SubjectName.RawData `
-                        -DifferenceObject $projectedChain[$i].Certificate.IssuerName.RawData)) {
+                    Compare-Object -ReferenceObject $projectedChain[$chainIndex].Certificate.SubjectName.RawData `
+                        -DifferenceObject $projectedChain[$chainIndex].Certificate.IssuerName.RawData)) {
                     Write-Debug "Leaf certificate is self-signed, skip validation."
                     break
                 }
-                [void]($projectedChain[$i].Certificate.Issuer -match "CN=([^,]+)")
+                [void]($projectedChain[$chainIndex].Certificate.Issuer -match "CN=([^,]+)")
                 $CAObject = if ($keyIndex -lt 0) {
                     New-Object PKI.EnterprisePKI.CAObject -Property @{Name = $matches[1]}
                 } else {
                     New-Object PKI.EnterprisePKI.CAObject -Property @{Name = "$($matches[1]) ($keyIndex)"}
                 }
                 $projectedChain | ForEach-Object {[int]$CAObject.ChainStatus += [int]$_.Status}
-                $urlpack = __getUrl $projectedChain[$i].Certificate.RawData $true
+                $BaseCrlURlPack = __getUrl $projectedChain[$chainIndex].Certificate.RawData $true
                 # process and validate certificate issuer in the AIA extension
-                $CAObject = __processCerts $CAObject $projectedChain
+                __processCerts $CAObject $projectedChain
                 # process and validate CDP extensions
-                for ($n = 0; $n -lt $urlPack.CDP.Length; $n++) {
+                for ($baseCrlIndex = 0; $baseCrlIndex -lt $BaseCrlURlPack.CDP.Length; $baseCrlIndex++) {
                     $deltas = @()
-                    $urlElement = New-Object PKI.EnterprisePKI.UrlElement -Property @{
-                        Name = "CDP Location #$($n + 1)";
-                        Url = $urlPack.CDP[$n];
+                    $BaseCrlUrlElement = New-Object PKI.EnterprisePKI.UrlElement -Property @{
+                        Name = "CDP Location #$($baseCrlIndex + 1)";
+                        Url = $BaseCrlURlPack.CDP[$baseCrlIndex];
                         UrlType = [PKI.EnterprisePKI.UrlType]::Crl;
                     }
-                    $obj = __downloadCrl $urlElement.Url
-                    if ($obj -is [SysadminsLV.PKI.Cryptography.X509Certificates.X509CRL2]) {
-                        $urlElement.SetObject($obj)
-                        $urlElement = __verifyCDP $urlElement $projectedChain[$i + 1]
-                        $urlPack2 = __getUrl ($urlElement.GetObject()).RawData $false
+                    $BaseCRL = __downloadCrl $BaseCrlUrlElement.Url
+                    if ($BaseCRL -is [SysadminsLV.PKI.Cryptography.X509Certificates.X509CRL2]) {
+                        $BaseCrlUrlElement.SetObject($BaseCRL)
+                        __verifyCDP $BaseCrlUrlElement $projectedChain[$chainIndex + 1]
+                        $DeltaCrlUrlPack = __getUrl ($BaseCrlUrlElement.GetObject()).RawData $false
                         # process and validate FreshestCRL extension if exist
-                        for ($m = 0; $m -lt $urlPack2.FreshestCRL.Length; $m++) {
+                        for ($deltaCrlIndex = 0; $deltaCrlIndex -lt $DeltaCrlUrlPack.FreshestCRL.Length; $deltaCrlIndex++) {
                             # skip duplicate
-                            if ($deltas | Where-Object {$_.Url -eq $urlPack2.FreshestCRL[$m]}) {
+                            if ($deltas | Where-Object {$_.Url -eq $DeltaCrlUrlPack.FreshestCRL[$deltaCrlIndex]}) {
                                 return
                             }
-                            $urlElement2 = New-Object PKI.EnterprisePKI.UrlElement -Property @{
-                                Name = "DeltaCRL Location #$($m + 1)";
-                                Url = $urlPack2.FreshestCRL[$m];
+                            $DeltaCrlUrlElement = New-Object PKI.EnterprisePKI.UrlElement -Property @{
+                                Name = "DeltaCRL Location #$($deltaCrlIndex + 1)";
+                                Url = $DeltaCrlUrlPack.FreshestCRL[$deltaCrlIndex];
                                 UrlType = [PKI.EnterprisePKI.UrlType]::Crl;
                             }
-                            $obj2 = __downloadCrl $urlElement2.Url
-                            if ($obj2 -is [SysadminsLV.PKI.Cryptography.X509Certificates.X509CRL2]) {
-                                $urlElement2.SetObject($obj2)
-                                $urlElement2 = __verifyCDP $urlElement2 $projectedChain[$i + 1] $obj -DeltaCRL
+                            $DeltaCRL = __downloadCrl $DeltaCrlUrlElement.Url
+                            if ($DeltaCRL -is [SysadminsLV.PKI.Cryptography.X509Certificates.X509CRL2]) {
+                                $DeltaCrlUrlElement.SetObject($DeltaCRL)
+                                __verifyCDP $DeltaCrlUrlElement $projectedChain[$chainIndex + 1] $BaseCRL -DeltaCRL
                             } else {
                                 Write-Debug "Failed to download CRL."
-                                $urlElement2.SetError($s_error -bor [PKI.EnterprisePKI.UrlStatus]::FailedToDownload)
-                                $urlElement2.ExtendedErrorInfo = $obj2
+                                $DeltaCrlUrlElement.SetError($s_error -bor [PKI.EnterprisePKI.UrlStatus]::FailedToDownload)
+                                $DeltaCrlUrlElement.ExtendedErrorInfo = $DeltaCRL
                             }
-                            $deltas += $urlElement2
+                            $deltas += $DeltaCrlUrlElement
                         }
                     } else {
                         Write-Debug "Failed to download CRL."
-                        $urlElement.SetError($s_error -bor [PKI.EnterprisePKI.UrlStatus]::FailedToDownload)
-                        $urlElement.ExtendedErrorInfo = $obj
+                        $BaseCrlUrlElement.SetError($s_error -bor [PKI.EnterprisePKI.UrlStatus]::FailedToDownload)
+                        $BaseCrlUrlElement.ExtendedErrorInfo = $BaseCRL
                     }
-                    $CAObject.URLs += $urlElement
+                    $CAObject.URLs += $BaseCrlUrlElement
                     $CAObject.URLs += $deltas
                 }
                 # process OCSP links in the AIA extension
-                $CAObject = __processOcsp $CAObject $projectedChain
+                __processOcsp $CAObject $projectedChain
                 $out.Childs += $CAObject
             }
             $out
@@ -626,9 +621,9 @@ namespace PKI.EnterprisePKI {
                         $retValue
                         return
                     }
-                    if (!$CA.Type.StartsWith("Enterprise")) {
+                    if (!$CA.IsEnterprise) {
                         Write-Debug "$($CA.DisplayName): not supported edition. Current: $($CA.Type)."
-                        throw "Only Enterprise CAs are supported by this parameterset."
+                        throw "Only Enterprise CAs are supported by this parameter set."
                     }
                     Write-Verbose ("{0} {1} {0}" -f ('=' * 20), $CA.DisplayName)
                     Write-Debug ("{0} {1} {0}" -f ('=' * 20), $CA.DisplayName)
