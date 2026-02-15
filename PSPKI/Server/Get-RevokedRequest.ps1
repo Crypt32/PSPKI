@@ -16,7 +16,9 @@
         [int]$PageSize = [int]::MaxValue,
         [Alias("Properties", "IncludeProperty", "IncludeProperties", "IncludedProperty", "IncludedProperties")]
         [String[]]$Property,
-        [String[]]$Filter
+        [String[]]$Filter,
+        [switch]$IncludeAttribute,
+        [switch]$IncludeExtension
     )
     begin {
         Assert-CommandRequirement $PREREQ_RSAT -ErrorAction Stop
@@ -31,7 +33,9 @@
             -Page $Page `
             -PageSize $PageSize `
             -Property $Property `
-            -Filter $Filter
-        }        
+            -Filter $Filter `
+            -IncludeAttribute:$IncludeAttribute `
+            -IncludeExtension:$IncludeExtension
+        }
     }
 }

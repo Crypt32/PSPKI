@@ -16,7 +16,9 @@
         [int]$PageSize = [int]::MaxValue,
         [Alias("Properties", "IncludeProperty", "IncludeProperties", "IncludedProperty", "IncludedProperties")]
         [String[]]$Property,
-        [String[]]$Filter
+        [String[]]$Filter,
+        [switch]$IncludeAttribute,
+        [switch]$IncludeExtension
     )
     begin {
         Assert-CommandRequirement $PREREQ_RSAT -ErrorAction Stop
@@ -58,22 +60,28 @@
                     $RowID | ForEach-Object {
                         $Reader = $CA.GetDbReader($Table)
                         Get-RequestRow `
+                            -CA $CA `
                             -Reader $Reader `
                             -Property $Property `
                             -Filter "$IdColumn -eq $_" `
                             -Schema $Schema `
                             -Page $Page `
-                            -PageSize $PageSize
+                            -PageSize $PageSize `
+                            -IncludeAttribute:$IncludeAttribute `
+                            -IncludeExtension:$IncludeExtension
                     }
                 } else {
                     $Reader = $CA.GetDbReader($Table)
                     Get-RequestRow `
+                        -CA $CA `
                         -Reader $Reader `
                         -Property $Property `
                         -Filter $Filter `
                         -Schema $Schema `
                         -Page $Page `
-                        -PageSize $PageSize
+                        -PageSize $PageSize `
+                        -IncludeAttribute:$IncludeAttribute `
+                        -IncludeExtension:$IncludeExtension
                 }
             } else {
                 # 'Extension' or 'Attribute' tables may return multiple objects for single RowID. Therefore,
@@ -84,23 +92,29 @@
                         $Reader = $CA.GetDbReader($Table)
                         $LocalFilter = $Filter + "$IdColumn -eq $_"
                         Get-RequestRow `
+                            -CA $CA `
                             -Reader $Reader `
                             -Property $Property `
                             -Filter $LocalFilter `
                             -Schema $Schema `
                             -Page $Page `
-                            -PageSize $PageSize
+                            -PageSize $PageSize `
+                            -IncludeAttribute:$IncludeAttribute `
+                            -IncludeExtension:$IncludeExtension
                         #$Filter = $Filter[0..($Filter.Length - 2)]
                     }
                 } else {
                     $Reader = $CA.GetDbReader($Table)
                     Get-RequestRow `
+                        -CA $CA `
                         -Reader $Reader `
                         -Property $Property `
                         -Filter $Filter `
                         -Schema $Schema `
                         -Page $Page `
-                        -PageSize $PageSize
+                        -PageSize $PageSize `
+                        -IncludeAttribute:$IncludeAttribute `
+                        -IncludeExtension:$IncludeExtension
                 }
             }
         }
