@@ -376,7 +376,7 @@ namespace PKI.EnterprisePKI {
                 Write-Debug "Referenced Base CRL number: $bcrlNumber"
                 $DeltaCrlIndicator = $crl.Extensions["2.5.29.27"]
                 if ($DeltaCrlIndicator -ne $null) {
-                    [Numerics.BigInteger]$indicator = (New-Object SysadminsLV.Asn1Parser.Universal.Asn1Integer -ArgumentList @(,($e.RawData))).Value
+                    [Numerics.BigInteger]$indicator = (New-Object SysadminsLV.Asn1Parser.Universal.Asn1Integer -ArgumentList @(,($DeltaCrlIndicator.RawData))).Value
                     Write-Debug "Required minimum Base CRL number: $indicator"
                     [bool]$indicatorIsCritical = $DeltaCrlIndicator.Critical
                 } else {
