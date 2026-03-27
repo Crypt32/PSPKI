@@ -18,30 +18,38 @@ function Get-RequestRow {
 
     function Join-AttributeTable($DbRow) {
         $NestedReader = $CA.GetDbReader("Attribute")
-        [void]$NestedReader.AddQueryFilter(
-            (New-Object SysadminsLV.PKI.Management.CertificateServices.Database.AdcsDbQueryFilter "AttributeRequestId", 1, $DbRow.Properties["RequestID"])
-        )
-        $Rows = $NestedReader.GetView() | ForEach-Object {
-            New-Object PSObject -Property @{
-                AttributeName = $_.Properties["AttributeName"]
-                AttributeValue = $_.Properties["AttributeValue"]
+        try {
+            [void]$NestedReader.AddQueryFilter(
+                (New-Object SysadminsLV.PKI.Management.CertificateServices.Database.AdcsDbQueryFilter "AttributeRequestId", 1, $DbRow.Properties["RequestID"])
+            )
+            $Rows = $NestedReader.GetView() | ForEach-Object {
+                New-Object PSObject -Property @{
+                    AttributeName = $_.Properties["AttributeName"]
+                    AttributeValue = $_.Properties["AttributeValue"]
+                }
             }
+            $DbRow.Properties.Add("RowAttributes", $Rows)
+        } finally {
+            $NestedReader.Dispose()
         }
-        $DbRow.Properties.Add("RowAttributes", $Rows)
     }
     function Join-ExtensionTable($DbRow) {
         $NestedReader = $CA.GetDbReader("Extension")
-        [void]$NestedReader.AddQueryFilter(
-            (New-Object SysadminsLV.PKI.Management.CertificateServices.Database.AdcsDbQueryFilter "ExtensionRequestId", 1, $DbRow.Properties["RequestID"])
-        )
-        $Rows = $NestedReader.GetView() | ForEach-Object {
-            New-Object PSObject -Property @{
-                ExtensionNameOid = $_.Properties["ExtensionNameOid"]
-                ExtensionObject = $_.Properties["ExtensionObject"]
-                ExtensionFlags = $_.Properties["ExtensionFlagsEnum"]
+        try {
+            [void]$NestedReader.AddQueryFilter(
+                (New-Object SysadminsLV.PKI.Management.CertificateServices.Database.AdcsDbQueryFilter "ExtensionRequestId", 1, $DbRow.Properties["RequestID"])
+            )
+            $Rows = $NestedReader.GetView() | ForEach-Object {
+                New-Object PSObject -Property @{
+                    ExtensionNameOid = $_.Properties["ExtensionNameOid"]
+                    ExtensionObject = $_.Properties["ExtensionObject"]
+                    ExtensionFlags = $_.Properties["ExtensionFlagsEnum"]
+                }
             }
+            $DbRow.Properties.Add("RowExtensions", $Rows)
+        } finally {
+            $NestedReader.Dispose()
         }
-        $DbRow.Properties.Add("RowExtensions", $Rows)
     }
     
     # parse restriction filters
