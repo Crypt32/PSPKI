@@ -1,10 +1,10 @@
 $ErrorActionPreference = "Stop"
 $PackageMap = @{
     "SysadminsLV.Asn1Parser"            = "1.3.0","net472"
-    "SysadminsLV.PKI"                   = "4.3.0","net472"
-    "SysadminsLV.PKI.OcspClient"        = "4.3.0","net472"
-    "SysadminsLV.PKI.Win"               = "4.3.0","net472"
-    "System.Security.Cryptography.Pkcs" = "8.0.0","net462"
+    "SysadminsLV.PKI"                   = "4.4.0","net472"
+    "SysadminsLV.PKI.OcspClient"        = "4.4.0","net472"
+    "SysadminsLV.PKI.Win"               = "4.4.0","net472"
+    "System.Security.Cryptography.Pkcs" = "10.0.5","net462"
 }
 
 Push-Location $PSScriptRoot
