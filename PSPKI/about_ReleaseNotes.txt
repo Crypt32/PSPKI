@@ -1,3 +1,7 @@
+PSPKI v4.4.0 Release Notes
+==========================
+https://github.com/Crypt32/PSPKI/releases/tag/v4.4.0
+
 PSPKI v4.3.0 Release Notes
 ==========================
 https://github.com/Crypt32/PSPKI/releases/tag/v4.3.0
