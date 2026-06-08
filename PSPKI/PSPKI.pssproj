@@ -48,9 +48,6 @@ dir $source -file | copy-item -dest ($target + "\") -exclude $exclude -force</Po
     <Content Include="about_PSPKI_Module.help.txt" />
     <Content Include="about_ReleaseNotes.txt" />
     <Content Include="Client\PSPKI.Help.xml" />
-    <Content Include="Library\Interop.CERTADMINLib.dll" />
-    <Content Include="Library\Interop.CERTCLILib.dll" />
-    <Content Include="Library\Interop.CERTENROLLLib.dll" />
     <Content Include="Library\SysadminsLV.Asn1Parser.dll" />
     <Content Include="Library\SysadminsLV.Asn1Parser.pdb" />
     <Content Include="Library\SysadminsLV.PKI.dll" />
