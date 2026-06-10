@@ -1,4 +1,4 @@
-﻿function Remove-CertificateTemplate {
+function Remove-CertificateTemplate {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

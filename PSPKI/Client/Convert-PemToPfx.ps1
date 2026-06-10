@@ -1,4 +1,4 @@
-﻿function Convert-PemToPfx {
+function Convert-PemToPfx {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

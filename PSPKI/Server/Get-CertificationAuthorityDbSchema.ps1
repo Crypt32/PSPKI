@@ -1,4 +1,4 @@
-﻿function Get-CertificationAuthorityDbSchema {
+function Get-CertificationAuthorityDbSchema {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

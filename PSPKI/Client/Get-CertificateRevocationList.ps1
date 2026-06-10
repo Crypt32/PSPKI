@@ -1,4 +1,4 @@
-﻿function Get-CertificateRevocationList {
+function Get-CertificateRevocationList {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

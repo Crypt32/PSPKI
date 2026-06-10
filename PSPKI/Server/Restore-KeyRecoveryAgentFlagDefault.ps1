@@ -1,4 +1,4 @@
-﻿function Restore-KeyRecoveryAgentFlagDefault {
+function Restore-KeyRecoveryAgentFlagDefault {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

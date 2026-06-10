@@ -1,4 +1,4 @@
-﻿function Get-CertificateTrustList {
+function Get-CertificateTrustList {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

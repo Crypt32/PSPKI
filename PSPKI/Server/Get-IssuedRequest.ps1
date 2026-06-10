@@ -1,4 +1,4 @@
-﻿function Get-IssuedRequest {
+function Get-IssuedRequest {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

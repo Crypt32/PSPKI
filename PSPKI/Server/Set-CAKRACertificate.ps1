@@ -1,4 +1,4 @@
-﻿function Set-CAKRACertificate {
+function Set-CAKRACertificate {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

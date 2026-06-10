@@ -1,4 +1,4 @@
-﻿function Remove-CATemplate {
+function Remove-CATemplate {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

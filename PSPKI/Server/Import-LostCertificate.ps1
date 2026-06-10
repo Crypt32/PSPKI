@@ -1,4 +1,4 @@
-﻿function Import-LostCertificate {
+function Import-LostCertificate {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

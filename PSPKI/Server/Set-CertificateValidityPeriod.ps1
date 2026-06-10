@@ -1,4 +1,4 @@
-﻿function Set-CertificateValidityPeriod {
+function Set-CertificateValidityPeriod {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

@@ -1,4 +1,4 @@
-﻿function Get-InterfaceFlag {
+function Get-InterfaceFlag {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

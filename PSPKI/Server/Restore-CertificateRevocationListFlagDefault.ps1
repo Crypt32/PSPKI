@@ -1,4 +1,4 @@
-﻿function Restore-CertificateRevocationListFlagDefault {
+function Restore-CertificateRevocationListFlagDefault {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

@@ -1,4 +1,4 @@
-﻿function New-SelfSignedCertificateEx {
+function New-SelfSignedCertificateEx {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

@@ -1,4 +1,4 @@
-﻿function Get-AdcsDatabaseRow {
+function Get-AdcsDatabaseRow {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

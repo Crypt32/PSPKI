@@ -1,4 +1,4 @@
-﻿function Get-CertificateRequest {
+function Get-CertificateRequest {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

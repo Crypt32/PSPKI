@@ -1,4 +1,4 @@
-﻿function Remove-AuthorityInformationAccess {
+function Remove-AuthorityInformationAccess {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

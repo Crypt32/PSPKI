@@ -1,4 +1,4 @@
-﻿function Get-CertificateTemplateAcl {
+function Get-CertificateTemplateAcl {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

@@ -1,4 +1,4 @@
-﻿function Ping-ICertInterface {
+function Ping-ICertInterface {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

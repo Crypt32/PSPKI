@@ -1,4 +1,4 @@
-﻿function Get-EnrollmentPolicyServerClient {
+function Get-EnrollmentPolicyServerClient {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

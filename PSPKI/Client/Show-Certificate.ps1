@@ -1,4 +1,4 @@
-﻿function Show-Certificate {
+function Show-Certificate {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>
