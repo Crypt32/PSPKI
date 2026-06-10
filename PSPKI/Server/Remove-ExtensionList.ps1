@@ -1,4 +1,4 @@
-﻿function Remove-ExtensionList {
+function Remove-ExtensionList {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

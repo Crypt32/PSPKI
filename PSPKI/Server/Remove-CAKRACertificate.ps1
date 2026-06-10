@@ -1,4 +1,4 @@
-﻿function Remove-CAKRACertificate {
+function Remove-CAKRACertificate {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

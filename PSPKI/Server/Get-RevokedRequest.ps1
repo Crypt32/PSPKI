@@ -1,4 +1,4 @@
-﻿function Get-RevokedRequest {
+function Get-RevokedRequest {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

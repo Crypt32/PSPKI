@@ -1,4 +1,4 @@
-﻿function Set-CRLDistributionPoint {
+function Set-CRLDistributionPoint {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

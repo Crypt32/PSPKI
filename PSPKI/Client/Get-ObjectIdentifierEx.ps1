@@ -1,4 +1,4 @@
-﻿function Get-ObjectIdentifierEx {
+function Get-ObjectIdentifierEx {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

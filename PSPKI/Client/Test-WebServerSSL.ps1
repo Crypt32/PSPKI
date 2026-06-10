@@ -1,4 +1,4 @@
-﻿function Test-WebServerSSL {
+function Test-WebServerSSL {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

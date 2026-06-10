@@ -1,4 +1,4 @@
-﻿function Get-CertificationAuthority {
+function Get-CertificationAuthority {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

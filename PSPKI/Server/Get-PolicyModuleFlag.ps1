@@ -1,4 +1,4 @@
-﻿function Get-PolicyModuleFlag {
+function Get-PolicyModuleFlag {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

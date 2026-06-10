@@ -1,4 +1,4 @@
-﻿function Unregister-ObjectIdentifier {
+function Unregister-ObjectIdentifier {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

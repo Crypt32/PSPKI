@@ -1,4 +1,4 @@
-﻿function Restore-PolicyModuleFlagDefault {
+function Restore-PolicyModuleFlagDefault {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

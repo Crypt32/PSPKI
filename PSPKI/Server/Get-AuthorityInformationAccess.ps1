@@ -1,4 +1,4 @@
-﻿function Get-AuthorityInformationAccess {
+function Get-AuthorityInformationAccess {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

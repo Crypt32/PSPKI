@@ -1,4 +1,4 @@
-﻿function Remove-CRLDistributionPoint {
+function Remove-CRLDistributionPoint {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

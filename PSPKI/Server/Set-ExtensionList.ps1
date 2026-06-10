@@ -1,4 +1,4 @@
-﻿function Set-ExtensionList {
+function Set-ExtensionList {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

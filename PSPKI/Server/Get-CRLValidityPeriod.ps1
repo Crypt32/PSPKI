@@ -1,4 +1,4 @@
-﻿function Get-CRLValidityPeriod {
+function Get-CRLValidityPeriod {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

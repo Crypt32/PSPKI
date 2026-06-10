@@ -1,4 +1,4 @@
-﻿function Get-KeyRecoveryAgentFlag {
+function Get-KeyRecoveryAgentFlag {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

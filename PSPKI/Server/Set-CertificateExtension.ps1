@@ -1,4 +1,4 @@
-﻿function Set-CertificateExtension {
+function Set-CertificateExtension {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

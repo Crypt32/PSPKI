@@ -1,4 +1,4 @@
-﻿function Get-ErrorMessage {
+function Get-ErrorMessage {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

@@ -1,4 +1,4 @@
-﻿function Get-CAExchangeCertificate {
+function Get-CAExchangeCertificate {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

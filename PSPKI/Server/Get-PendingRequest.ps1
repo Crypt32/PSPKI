@@ -1,4 +1,4 @@
-﻿function Get-PendingRequest {
+function Get-PendingRequest {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

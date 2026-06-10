@@ -1,4 +1,4 @@
-﻿function Publish-CRL {
+function Publish-CRL {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

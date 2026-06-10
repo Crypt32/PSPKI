@@ -1,4 +1,4 @@
-﻿function Get-CATemplate {
+function Get-CATemplate {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

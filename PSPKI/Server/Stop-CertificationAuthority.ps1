@@ -1,4 +1,4 @@
-﻿function Stop-CertificationAuthority {
+function Stop-CertificationAuthority {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

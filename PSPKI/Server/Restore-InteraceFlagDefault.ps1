@@ -1,4 +1,4 @@
-﻿function Restore-InterfaceFlagDefault {
+function Restore-InterfaceFlagDefault {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

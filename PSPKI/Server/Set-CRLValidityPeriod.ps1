@@ -1,4 +1,4 @@
-﻿function Set-CRLValidityPeriod {
+function Set-CRLValidityPeriod {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>

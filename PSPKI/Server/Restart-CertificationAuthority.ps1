@@ -1,4 +1,4 @@
-﻿function Restart-CertificationAuthority {
+function Restart-CertificationAuthority {
 <#
 .ExternalHelp PSPKI.Help.xml
 #>
